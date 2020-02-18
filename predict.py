@@ -21,16 +21,13 @@ def get_teta_values():
 			if (is_float(l1) and is_float(l2)):
 				return(float(l1), float(l2))
 			else:
-				print("file content is not a number or not enough lines were provided")
-				sys.exit(0)
-		
+				sys.exit("file content is not a number or not enough lines were provided")
 		except IOError:
 			print("could not read file")
 	else:
-		print("no file called", teta_values)
-		sys.exit(0)
+		sys.exit(str.format("no file called " + f_teta))
 
-def estimatePrice(mileage):
+def estimate_price(mileage):
 	t0, t1 = get_teta_values()
 	return (t0 + (t1*mileage))
 
@@ -39,7 +36,7 @@ while (True):
 	user_input = input()
 	if (is_float(user_input)):
 		print("Predicted value:")
-		print(estimatePrice(150500))
+		print(estimate_price(user_input))
 		sys.exit(0)
 	else:
 		print("Invalid input")
