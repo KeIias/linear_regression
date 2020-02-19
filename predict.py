@@ -27,16 +27,17 @@ def get_teta_values():
 	else:
 		sys.exit(str.format("no file called " + f_teta))
 
-def estimate_price(mileage):
-	t0, t1 = get_teta_values()
-	return (t0 + (t1*mileage))
+def estimate_price(t0, t1, mileage):
+	return (t0 + (t1 * mileage))
 
-while (True):
-	print('Type prediction to make:')
-	user_input = input()
-	if (is_float(user_input)):
-		print("Predicted value:")
-		print(estimate_price(user_input))
-		sys.exit(0)
-	else:
-		print("Invalid input")
+if __name__ == "__main__":
+	while (True):
+		t0, t1 = get_teta_values()
+		print('Type prediction to make:')
+		user_input = input()
+		if (is_float(user_input)):
+			print("Predicted value:")
+			print(estimate_price(t0, t1, user_input))
+			sys.exit(0)
+		else:
+			print("Invalid input")
