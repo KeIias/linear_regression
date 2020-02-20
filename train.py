@@ -1,7 +1,8 @@
-import numpy as np
-import pandas as pd
 import sys
 import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from predict import estimate_price
 
 data_path = "data.csv"
@@ -14,27 +15,29 @@ def get_data():
 	except IOError:
 		print("could not read data file")
 
-def normalize(data):
+def standardize(data):
 	return ((data - np.mean(data)) / np.std(data))
 
-def denormalize(data, ref_data):
+def unstandardize(data, ref_data):
 	return ((data*np.mean(ref_data) + np.mean(ref_data)))
 
-def compute_tetas(data, learning_rate):
-	t0 = 0
-	t1 = 0
-	m = len(data[0])
+def compute_theta(x, y, learning_rate):
+	m = len(x)
+	theta = np.zeros(2)
 	for j in range(0, 200):
-		tmp_t0 = 0
-		tmp_t1 = 0
+		tmp_theta = np.zeros(2)
 		for i in range(0, m):
-			tmp_t0 += (estimate_price(t0, t1, data[0][i]) - data[1][i])
-			tmp_t1 += ((estimate_price(t0, t1, (data[0][i])) - data[1][i]) * data[0][i])
-		t0 -= (tmp_t0 * learning_rate) / m
-		t1 -= (tmp_t1 * learning_rate) / m
-	return t0, t1
+			prediction = estimate_price(theta[0], theta[1], x[i])
+			error = prediction - y[i]
+			tmp_theta[0] += error
+			tmp_theta[1] += error * x[i]
+			#Equivalent to the 4 lines above, I just broke down the formula for readability purposes
+			#tmp_theta[0] += (estimate_price(theta[0], theta[1], x[i]) - y[i])
+			#tmp_theta[1] += (estimate_price(theta[0], theta[1], x[i]) - y[i]) * x[i]
+		theta -= (tmp_theta * learning_rate) / m
+	return theta
 
 data = get_data()
-normalized_data = (np.array([normalize(data[:,0]), normalize(data[:,1])]))
-t0, t1 = compute_tetas(normalized_data, 0.3)
-print(t0, t1)
+standardized_data = (np.array([standardize(data[:,0]), standardize(data[:,1])]))
+theta = compute_theta(standardized_data[0], standardized_data[1], 0.3)
+print(theta)
