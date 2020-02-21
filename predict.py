@@ -1,7 +1,7 @@
 import sys
 import os
 
-f_teta = "teta_values"
+f_theta = "theta_values"
 
 def is_float(value):
 	try:
@@ -13,9 +13,9 @@ def is_float(value):
 		return False
 
 def get_teta_values():
-	if os.path.exists(f_teta):
+	if os.path.exists(f_theta):
 		try:
-			file = open(f_teta, "r")
+			file = open(f_theta, "r")
 			l1 = file.readline().strip()
 			l2 = file.readline().strip()
 			if (is_float(l1) and is_float(l2)):
@@ -25,19 +25,22 @@ def get_teta_values():
 		except IOError:
 			print("could not read file")
 	else:
-		sys.exit(str.format("no file called " + f_teta))
+		sys.exit(str.format("no file called " + f_theta))
 
 def estimate_price(t0, t1, mileage):
 	return (t0 + (t1 * mileage))
 
-if __name__ == "__main__":
+def main():
 	while (True):
 		t0, t1 = get_teta_values()
 		print('Type prediction to make:')
 		user_input = input()
 		if (is_float(user_input)):
 			print("Predicted value:")
-			print(estimate_price(t0, t1, user_input))
+			print(estimate_price(t0, t1, float(user_input)))
 			sys.exit(0)
 		else:
 			print("Invalid input")
+
+if __name__ == "__main__":
+	main()
