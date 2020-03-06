@@ -11,7 +11,7 @@ def get_data():
 	if (not os.path.exists(data_path)):
 		sys.exit("data file not found")
 	try:
-		return (pd.read_csv(data_path).to_numpy())
+		return (pd.read_csv(data_path))
 	except IOError:
 		print("could not read data file")
 
@@ -28,7 +28,8 @@ def unstandardize_theta(theta, data):
 	x = data[0]
 	y = estimate_price(theta[0], theta[1], standardize(x))
 	y = unstandardize(y, data[1])
-	#plt.plot(x, y)
+	plt.subplot(1, 2, 1)
+	plt.plot(x, y)
 	last = len(x) - 1
 	a = (y[last] - y[0]) / (x[last] - x[0])
 	b = y[0] - (x[0] * a)
@@ -54,14 +55,20 @@ def compute_theta(x, y, learning_rate):
 		iteration_error /= m
 		error_history.append(iteration_error)
 		theta -= (tmp_theta * learning_rate) / m
-	print(error_history)
+	plt.subplot(1, 2, 2)
+	plt.xlabel("Iterations", fontsize=21)
+	plt.ylabel("Error", fontsize=21)
 	plt.plot(list(range(0, len(error_history))), error_history)
 	return theta
 
 def main():
 	data = get_data()
-	data = reshape_data(data)
-	#plt.plot(data[0], data[1], "+", color="red")
+	plt.figure(figsize=(18, 8))
+	plt.subplot(1, 2, 1)
+	plt.xlabel(data.columns[0], fontsize=21)
+	plt.ylabel(data.columns[1], fontsize=21)
+	data = reshape_data(data.to_numpy())
+	plt.plot(data[0], data[1], "+", color="red")
 	theta = compute_theta(standardize(data[0]), standardize(data[1]), 0.1)
 	theta = unstandardize_theta(theta, data)
 	np.savetxt("theta_values", theta, fmt="%.20f")

@@ -38,7 +38,7 @@ def main():
 		if (is_float(user_input)):
 			print("Predicted value:")
 			print(estimate_price(t0, t1, float(user_input)))
-			sys.exit(0)
+			break
 		else:
 			print("Invalid input")
 
