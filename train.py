@@ -61,7 +61,7 @@ def compute_theta(x, y, learning_rate):
 	plt.plot(list(range(0, len(error_history))), error_history)
 	return theta
 
-def main():
+if (__name__ == "__main__"):
 	data = get_data()
 	plt.figure(figsize=(18, 8))
 	plt.subplot(1, 2, 1)
@@ -71,7 +71,6 @@ def main():
 	plt.plot(data[0], data[1], "+", color="red")
 	theta = compute_theta(standardize(data[0]), standardize(data[1]), 0.1)
 	theta = unstandardize_theta(theta, data)
+	plt.show()
 	np.savetxt("theta_values", theta, fmt="%.20f")
-
-if (__name__ == "__main__"):
-	main()
+	print("Coefficients successfully computed and saved in theta_values")
