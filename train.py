@@ -28,8 +28,8 @@ def unstandardize_theta(theta, data):
 	x = data[0]
 	y = estimate_price(theta[0], theta[1], standardize(x))
 	y = unstandardize(y, data[1])
-	plt.subplot(1, 2, 1)
-	plt.plot(x, y)
+	
+	ax1.plot(x, y)
 	last = len(x) - 1
 	a = (y[last] - y[0]) / (x[last] - x[0])
 	b = y[0] - (x[0] * a)
@@ -40,7 +40,8 @@ def compute_theta(x, y, learning_rate):
 	m = len(x)
 	theta = np.zeros(2)
 	error_history = []
-	for j in range(0, 100):
+
+	for j in range(0, epochs):
 		tmp_theta = np.zeros(2)
 		iteration_error = 0
 		for i in range(0, m):
@@ -55,20 +56,21 @@ def compute_theta(x, y, learning_rate):
 		iteration_error /= m
 		error_history.append(iteration_error)
 		theta -= (tmp_theta * learning_rate) / m
-	plt.subplot(1, 2, 2)
-	plt.xlabel("Iterations", fontsize=21)
-	plt.ylabel("Error", fontsize=21)
-	plt.plot(list(range(0, len(error_history))), error_history)
+	ax2.set_xlabel("Iterations", fontsize=21)
+	ax2.set_ylabel("Error", fontsize=21)
+	ax2.plot(list(range(0, len(error_history))), error_history)
 	return theta
+
+epochs = 100
 
 if (__name__ == "__main__"):
 	data = get_data()
-	plt.figure(figsize=(18, 8))
-	plt.subplot(1, 2, 1)
-	plt.xlabel(data.columns[0], fontsize=21)
-	plt.ylabel(data.columns[1], fontsize=21)
+	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18,8))
+
+	ax1.set_xlabel(data.columns[0], fontsize=21)
+	ax1.set_ylabel(data.columns[1], fontsize=21)
 	data = reshape_data(data.to_numpy())
-	plt.plot(data[0], data[1], "+", color="red")
+	ax1.plot(data[0], data[1], "+", color="red")
 	theta = compute_theta(standardize(data[0]), standardize(data[1]), 0.1)
 	theta = unstandardize_theta(theta, data)
 	plt.show()
