@@ -9,7 +9,7 @@ def is_float(value):
 		if (value.isalpha()):
 			return False
 		return True
-	except ValueError:
+	except:
 		return False
 
 def get_teta_values():
@@ -22,8 +22,8 @@ def get_teta_values():
 				return(float(l1), float(l2))
 			else:
 				sys.exit("file content is not a number or not enough lines were provided")
-		except IOError:
-			print("could not read file")
+		except:
+			sys.exit("could not read theta_values file")
 	else:
 		sys.exit(str.format("no file called " + f_theta))
 

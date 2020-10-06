@@ -12,7 +12,7 @@ def get_data():
 		sys.exit("data file not found")
 	try:
 		return (pd.read_csv(data_path))
-	except IOError:
+	except:
 		print("could not read data file")
 
 def reshape_data(data):
@@ -74,5 +74,8 @@ if (__name__ == "__main__"):
 	theta = compute_theta(standardize(data[0]), standardize(data[1]), 0.1)
 	theta = unstandardize_theta(theta, data)
 	plt.show()
-	np.savetxt("theta_values", theta, fmt="%.20f")
-	print("Coefficients successfully computed and saved in theta_values")
+	try:
+		np.savetxt("theta_values", theta, fmt="%.20f")
+		print("Coefficients successfully computed and saved in theta_values")
+	except:
+		print("Could not save coefficients in theta_values file")
